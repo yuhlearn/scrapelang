@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TestRunner",
+            "request": "launch",
+            "mainClass": "com.yuhlearn.datastructures.TestRunner",
+            "projectName": "scrapelang"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - App",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "com.yuhlearn.scrapelang.App",
+            "args": "",
+            "projectName": "scrapelang"
+        }
+    ]
+}

@@ -1,0 +1,37 @@
+# Maven
+target/
+.project
+.classpath
+.settings/
+.svn/
+bin/
+
+# Intellij
+*.ipr
+*.iml
+.idea
+out/
+.DS_Store
+/bootstrap
+/dependencies.xml
+.java-version
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Eclipse
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
