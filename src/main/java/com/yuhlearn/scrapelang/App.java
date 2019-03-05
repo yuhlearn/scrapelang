@@ -2,6 +2,8 @@ package com.yuhlearn.scrapelang;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 import com.yuhlearn.datastructures.DoubleArrayTrie;
 
@@ -27,6 +29,8 @@ public class App
         }
 
         DoubleArrayTrie<String> trie = new DoubleArrayTrie<String>();
+        HashMap<String,String> hash = new HashMap<String,String>();
+        TreeMap<String,String> tree = new TreeMap<String,String>();
 
         // Insert all strings
         final long insertStart = System.currentTimeMillis();
@@ -36,6 +40,21 @@ public class App
         }
         final long insertEnd = System.currentTimeMillis();
 
+        final long hashInsertStart = System.currentTimeMillis();
+        for ( int i = 0; i < strings.length; i++ )
+        {
+            hash.put( strings[i], strings[i] );
+        }
+        final long hashInsertEnd = System.currentTimeMillis();
+
+        final long treeInsertStart = System.currentTimeMillis();
+        for ( int i = 0; i < strings.length; i++ )
+        {
+            tree.put( strings[i], strings[i] );
+        }
+        final long treeInsertEnd = System.currentTimeMillis();
+
+
         // Find all strings
         final long findStart = System.currentTimeMillis();
         for ( int i = 0; i < strings.length; i++ )
@@ -43,6 +62,21 @@ public class App
             trie.findEqual( strings[i] );
         }
         final long findEnd = System.currentTimeMillis();
+
+        final long hashFindStart = System.currentTimeMillis();
+        for ( int i = 0; i < strings.length; i++ )
+        {
+            hash.get( strings[i] );
+        }
+        final long hashFindEnd = System.currentTimeMillis();
+
+        final long treeFindStart = System.currentTimeMillis();
+        for ( int i = 0; i < strings.length; i++ )
+        {
+            tree.get( strings[i] );
+        }
+        final long treeFindEnd = System.currentTimeMillis();
+
 
         // Delete all strings
         final long deleteStart = System.currentTimeMillis();
@@ -52,33 +86,50 @@ public class App
         }
         final long deleteEnd = System.currentTimeMillis();
 
-        // Delete half of the entries and insert them again
-        final int half = strings.length / 2;
-
+        final long hashDeleteStart = System.currentTimeMillis();
         for ( int i = 0; i < strings.length; i++ )
         {
-            trie.insert( strings[i], strings[i] );
+            hash.remove( strings[i] );
         }
+        final long hashDeleteEnd = System.currentTimeMillis();
 
-        final long deleteInsertStart = System.currentTimeMillis();
-        for ( int i = 0; i < half; i++ )
+        final long treeDeleteStart = System.currentTimeMillis();
+        for ( int i = 0; i < strings.length; i++ )
         {
-            trie.deleteEqual( strings[i] );
+            tree.remove( strings[i] );
         }
-        for ( int i = 0; i < half; i++ )
-        {
-            trie.insert( strings[i], strings[i] );
-        }
-        final long deleteInsertEnd = System.currentTimeMillis();
+        final long treeDeleteEnd = System.currentTimeMillis();
+
 
         final long insertTime = (insertEnd - insertStart);
-        final long deleteTime = (deleteEnd - deleteStart);
-        final long findTime = (findEnd - findStart);
-        final long deleteInsertTime = (deleteInsertEnd - deleteInsertStart);
+        final long hashInsertTime = (hashInsertEnd - hashInsertStart);
+        final long treeInsertTime = (treeInsertEnd - treeInsertStart);
 
-        System.out.println("Insert execution time: " + insertTime + " ms");
-        System.out.println("Find   execution time: " + findTime + " ms");
-        System.out.println("Delete execution time: " + deleteTime + " ms");
-        System.out.println("Delins execution time: " + deleteInsertTime + " ms");
+        final long findTime = (findEnd - findStart);
+        final long hashFindTime = (hashFindEnd - hashFindStart);
+        final long treeFindTime = (treeFindEnd - treeFindStart);
+
+        final long deleteTime = (deleteEnd - deleteStart);
+        final long hashDeleteTime = (hashDeleteEnd - hashDeleteStart);
+        final long treeDeleteTime = (treeDeleteEnd - treeDeleteStart);
+
+
+        System.out.print("Insert execution time");
+        System.out.print(":\ttrie " + insertTime + " ms");
+        System.out.print(",\thash " + hashInsertTime + " ms");
+        System.out.print(",\ttree " + treeInsertTime + " ms");
+        System.out.println();
+
+        System.out.print("Lookup execution time");
+        System.out.print(":\ttrie " + findTime + " ms");
+        System.out.print(",\thash " + hashFindTime + " ms");
+        System.out.print(",\ttree " + treeFindTime + " ms");
+        System.out.println();
+
+        System.out.print("Delete execution time");
+        System.out.print(":\ttrie " + deleteTime + " ms");
+        System.out.print(",\thash " + hashDeleteTime + " ms");
+        System.out.print(",\ttree " + treeDeleteTime + " ms");
+        System.out.println();
     }
 }

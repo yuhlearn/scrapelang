@@ -14,21 +14,25 @@ public class DoubleArrayTrie<E>
     private TailData<E>[] tail;
 
     private int capacity;
+    private int minCapacity;
+    private int maxState;
 
     public DoubleArrayTrie()
     {
-        this( UTF8CharMap.MAX_UTF8_VALUE );
+        this( 1024 );
     }
 
     public DoubleArrayTrie( int initialCapacity ) 
     {
         capacity = initialCapacity;
+        minCapacity = initialCapacity;
+        maxState = START_STATE;
 
         base = new int[capacity];
         check = new int[capacity];
         tail = (TailData<E>[]) new TailData[capacity];
 
-        // The base of nodes adjacent to the start state start at LAST_LINK
+        // The base of nodes adjacent to the start state start at INIT_LAST_LINK
         base[START_STATE] = INIT_LAST_LINK;
 
         // The first link in the G-link points BACK to the last free link.
@@ -133,12 +137,13 @@ public class DoubleArrayTrie<E>
 
     public ResultSet<E> deleteEqual( final byte[] string )
     {
-        final int state = findEqualAux( string );
+        final int deleteState = findEqualAux( string );
+        ResultSet<E> returnData = null;
 
-        if ( state > -1 )
+        if ( deleteState > -1 )
         {
-            ResultSet<E> data = tail[state].getData();
-            int current = state;
+            returnData = tail[deleteState].getData();
+            int current = deleteState;
 
             // IF the current state is not the start state AND it is a leaf state 
             if ( ( current != START_STATE ) && ( base[current] == LEAF_STATE ) )
@@ -147,7 +152,7 @@ public class DoubleArrayTrie<E>
                 {
                     // Delete the state and tail data and walk the tree backwards
                     int parent = check[current];
-                    makeLink(current, getLinkAfter( current ) );
+                    makeLink( current, getLinkAfter( current ) );
                     current = parent;
                 }
                 while ( ( current != START_STATE ) && ( tail[current] == null ) && ! hasTransitions( current ) );
@@ -162,10 +167,10 @@ public class DoubleArrayTrie<E>
                 tail[current] = null;
             }
 
-            return data;
+            tryShrinkCapacity( deleteState );            
         }
-        
-        return null;
+    
+        return returnData;
     }
 
     private boolean hasTransitions( final int state )
@@ -395,6 +400,12 @@ public class DoubleArrayTrie<E>
 
         check[previousLink] = -nextLink;
         base[nextLink] = -previousLink;
+
+        if ( link > maxState )
+        {
+            maxState = link;
+            //System.out.println( maxState );
+        }
     }
 
     // Make state a link before nextLink
@@ -582,5 +593,42 @@ public class DoubleArrayTrie<E>
             base[newLastLink] = - ( newLastLink - 1 );
             base[FIRST_LINK] = - newLastLink;
         }
+    }
+
+    // Try to shrink the trie, assuming that state was just deleted
+    private void tryShrinkCapacity( final int state )
+    {
+        if ( state >= maxState )
+        {
+            updateMaxState();
+
+            if ( maxState <= capacity / 4 && minCapacity <= capacity / 2 ) 
+            {
+                //System.out.println( "Resize: " + maxState + " (" + capacity + " diff " + ( capacity - maxState ) + ")");
+
+                capacity = capacity / 2;
+
+                final int newLastLink = Math.min( getLastLink(), capacity - 1 );
+                
+                base = Arrays.copyOf( base, capacity );
+                check = Arrays.copyOf( check, capacity );
+                tail = Arrays.copyOf( tail, capacity );
+
+                base[FIRST_LINK] = - newLastLink;
+                check[newLastLink] = - FIRST_LINK;            
+            }
+        }
+    }
+
+    private void updateMaxState()
+    {
+        int newMaxState = maxState;
+
+        while ( base[newMaxState] < LEAF_STATE )
+            --newMaxState;
+
+        maxState = newMaxState;
+
+        //System.out.println( maxState + " (" + capacity + " diff " + ( (capacity / 4) - maxState ) + ")" );
     }
 }
