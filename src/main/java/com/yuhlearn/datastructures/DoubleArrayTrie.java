@@ -402,10 +402,7 @@ public class DoubleArrayTrie<E>
         base[nextLink] = -previousLink;
 
         if ( link > maxState )
-        {
             maxState = link;
-            //System.out.println( maxState );
-        }
     }
 
     // Make state a link before nextLink
@@ -598,14 +595,12 @@ public class DoubleArrayTrie<E>
     // Try to shrink the trie, assuming that state was just deleted
     private void tryShrinkCapacity( final int state )
     {
-        if ( state >= maxState )
+        if ( base[maxState] < LEAF_STATE )
         {
             updateMaxState();
 
-            if ( maxState <= capacity / 4 && minCapacity <= capacity / 2 ) 
+            if ( maxState <= ( capacity / 4 ) && minCapacity <= ( capacity / 2 ) ) 
             {
-                //System.out.println( "Resize: " + maxState + " (" + capacity + " diff " + ( capacity - maxState ) + ")");
-
                 capacity = capacity / 2;
 
                 final int newLastLink = Math.min( getLastLink(), capacity - 1 );
@@ -628,7 +623,5 @@ public class DoubleArrayTrie<E>
             --newMaxState;
 
         maxState = newMaxState;
-
-        //System.out.println( maxState + " (" + capacity + " diff " + ( (capacity / 4) - maxState ) + ")" );
     }
 }
