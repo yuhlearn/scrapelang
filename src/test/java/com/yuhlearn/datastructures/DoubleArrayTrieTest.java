@@ -1,8 +1,8 @@
 package com.yuhlearn.datastructures;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.Random;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,20 +13,20 @@ import static org.junit.Assert.*;
 /**
  * Unit test for the DoubleArrayTrie class.
  */
-@RunWith(JUnit4.class)
+@RunWith( JUnit4.class )
 public class DoubleArrayTrieTest 
 {
     String[] strings = new String[100000];
-    Random rand = new Random();
 
     @Before
     public void init()
     {        
-        String path = "src/test/java/com/yuhlearn/datastructures/strings.txt";
+        String path = "/strings.txt";
 
         try
         {
-            BufferedReader reader = new BufferedReader( new FileReader( path ) );
+            InputStream in = getClass().getResourceAsStream( path );
+            BufferedReader reader = new BufferedReader( new InputStreamReader( in, "UTF-8" ) );
 
             for ( int i = 0; i < strings.length; i++ )
                 strings[i] = reader.readLine();

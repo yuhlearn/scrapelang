@@ -2,6 +2,41 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - RegexTest",
+            "request": "launch",
+            "mainClass": "com.yuhlearn.scrapelang.RegexTest",
+            "projectName": "scrapelang"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TriGramBenchmark",
+            "request": "launch",
+            "mainClass": "com.yuhlearn.benchmarks.TriGramBenchmark",
+            "projectName": "scrapelang"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BenchmarkRunner",
+            "request": "launch",
+            "mainClass": "com.yuhlearn.benchmarks.BenchmarkRunner",
+            "projectName": "scrapelang"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BenchmarkRunner",
+            "request": "launch",
+            "mainClass": "BenchmarkRunner",
+            "projectName": "scrapelang"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TriExtract",
+            "request": "launch",
+            "mainClass": "com.yuhlearn.scrapelang.TriExtract",
+            "projectName": "scrapelang"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - TestRunner",
             "request": "launch",
             "mainClass": "com.yuhlearn.datastructures.TestRunner",
